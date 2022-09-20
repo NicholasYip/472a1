@@ -1,16 +1,25 @@
 from functions import count_labels, print_graph, get_static_file
 import json
 import numpy as np
-from pathlib import Path
+from sklearn.feature_extraction.text import CountVectorizer
 
 
 file = open(get_static_file('goemotions.json'), "r")
 comments = np.array(json.load(file))
+file.close()
 
 emotions = count_labels(1, comments)
 sentiments = count_labels(2, comments)
 
-print_graph(emotions, 'emotions.pdf')
-print_graph(sentiments, 'sentiments.pdf')
+# print_graph(emotions, 'emotions.pdf')
+# print_graph(sentiments, 'sentiments.pdf')
 
-file.close()
+#TODO: fix memory issue
+text_comments = [comment[0] for comment in comments]
+vectorizer = CountVectorizer()
+cv_fit = vectorizer.fit_transform(text_comments)
+list_features = vectorizer.get_feature_names_out()
+list_count = cv_fit.toarray().sum(axis=0)
+features_count = dict(zip(list_features, list_count))
+
+print(features_count)
