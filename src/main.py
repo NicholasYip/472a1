@@ -15,8 +15,8 @@ file.close()
 
 emotions = count_labels(1, comments)
 sentiments = count_labels(2, comments)
-# print_graph(emotions, 'emotions.pdf')
-# print_graph(sentiments, 'sentiments.pdf')
+# print_graph(emotions, 'Emotions' ,'emotions.pdf')
+# print_graph(sentiments, 'Sentiment' ,'sentiments.pdf')
 
 # Part 2.1
 # print("\nPart 2.1")

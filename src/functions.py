@@ -17,9 +17,12 @@ def count_labels(index, arr):
     return labels
 
 
-def print_graph(labels_dict, save_name='default.pdf'):
+def print_graph(labels_dict, y_label, save_name='default.pdf'):
     x_axis = list(labels_dict.keys())
     y_axis = list(labels_dict.values())
+    plt.xlabel('Occurences')
+    plt.ylabel(y_label)
+    plt.title('Number of Occurences for each ' + y_label + ' Found in the Dictionary GoEmotion')
     plt.barh(x_axis, y_axis)  # printed vertically to better show the labels
     plt.savefig(get_static_file(save_name), bbox_inches="tight")
     plt.show()
