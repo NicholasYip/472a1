@@ -1,5 +1,6 @@
 from matplotlib import pyplot as plt
 from pathlib import Path
+import numpy as np
 
 
 def get_static_file(file_name):
@@ -24,3 +25,8 @@ def print_graph(labels_dict, save_name='default.pdf'):
     plt.savefig(get_static_file(save_name), bbox_inches="tight")
     plt.show()
 
+def convert_label_to_index(arr, labels):
+    converted_arr = np.zeros(arr.size)
+    for i, element in enumerate(arr):
+        converted_arr[i] = np.where(labels == element)[0][0]
+    return converted_arr
