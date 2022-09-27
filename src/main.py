@@ -17,10 +17,8 @@ emotions = count_labels(1, comments)
 list_emotions = np.array(list(emotions.keys()))
 
 sentiments = count_labels(2, comments)
-list_sentiments = np.array(list(sentiments.keys()))
-
-# print_graph(emotions, 'emotions.pdf')
-# print_graph(sentiments, 'sentiments.pdf')
+# print_graph(emotions, 'Emotions' ,'emotions.pdf')
+# print_graph(sentiments, 'Sentiment' ,'sentiments.pdf')
 
 # Part 2.1
 # print("\nPart 2.1")
