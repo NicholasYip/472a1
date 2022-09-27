@@ -17,6 +17,7 @@ emotions = count_labels(1, comments)
 list_emotions = np.array(list(emotions.keys()))
 
 sentiments = count_labels(2, comments)
+list_sentiments = np.array(list(sentiments.keys()))
 # print_graph(emotions, 'Emotions' ,'emotions.pdf')
 # print_graph(sentiments, 'Sentiment' ,'sentiments.pdf')
 
@@ -58,9 +59,8 @@ print('\nPart 2.3.1 - Emotions')
 model = classifier.fit(X, train_batch_emotions_indexed)
 right_predictions = 0
 for i, comment in enumerate(test):
-    res = classifier.predict(comment)
-    prediction = list_emotions[int(res[0])]
-    if prediction == test_batch_emotions[i]:
+    prediction = classifier.predict(comment)[0]
+    if list_emotions[int(prediction)] == test_batch_emotions[i]:
         right_predictions += 1
 print('# of right predictions: ', right_predictions, 'total tests: ', test_batch_emotions.size, 'percentage accuracy: ', float(right_predictions)/float(test_batch_emotions.size)*100, '%')
 
