@@ -4,6 +4,9 @@ import numpy as np
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.model_selection import train_test_split
 from sklearn.naive_bayes import MultinomialNB
+from sklearn import preprocessing
+from sklearn import tree
+import graphviz 
 
 # install packages by running pip install -r requirements.txt
 
@@ -15,7 +18,6 @@ file.close()
 
 emotions = count_labels(1, comments)
 list_emotions = np.array(list(emotions.keys()))
-
 sentiments = count_labels(2, comments)
 list_sentiments = np.array(list(sentiments.keys()))
 # print_graph(emotions, 'Emotions' ,'emotions.pdf')
@@ -31,8 +33,9 @@ list_features = vectorizer.get_feature_names_out()
 # features_count = dict(zip(list_features, list_count))
 # print("There are ", list_features.size, " different words in the Reddit comments\n")
 
+
 # Part 2.2
-# print("\nPart 2.2")
+print("\nPart 2.2")
 train_batch, test_batch = np.array(train_test_split(comments, train_size=0.8, test_size=0.2, shuffle=True), dtype=object)
 
 train_batch_comments = np.array([comment[0] for comment in train_batch])
@@ -55,22 +58,54 @@ classifier = MultinomialNB()
 X = vectorizer.fit_transform(train_batch_comments)
 test = vectorizer.transform(test_batch_comments)
 
-print('\nPart 2.3.1 - Emotions')
-model = classifier.fit(X, train_batch_emotions_indexed)
-right_predictions = 0
-for i, comment in enumerate(test):
-    prediction = classifier.predict(comment)[0]
-    if list_emotions[int(prediction)] == test_batch_emotions[i]:
-        right_predictions += 1
-print('# of right predictions: ', right_predictions, 'total tests: ', test_batch_emotions.size, 'percentage accuracy: ', float(right_predictions)/float(test_batch_emotions.size)*100, '%')
 
-print('\nPart 2.3.1 - Sentiments')
-model = classifier.fit(X, train_batch_sentiments_indexed)
-right_predictions = 0
-for i, comment in enumerate(test):
-    prediction = classifier.predict(comment)[0]
-    if list_sentiments[int(prediction)] == test_batch_sentiments[i]:
-        right_predictions += 1
-print('# of right predictions: ', right_predictions, 'total tests: ', test_batch_sentiments.size, 'percentage accuracy: ', float(right_predictions)/float(test_batch_sentiments.size)*100, '%')
+# print('\nPart 2.3.1 - Emotions')
+# model = classifier.fit(X, train_batch_emotions_indexed)
+# right_predictions = 0
+# for i, comment in enumerate(test):
+#     prediction = classifier.predict(comment)[0]
+#     if list_emotions[int(prediction)] == test_batch_emotions[i]:
+#         right_predictions += 1
+# print('# of right predictions: ', right_predictions, 'total tests: ', test_batch_emotions.size, 'percentage accuracy: ', float(right_predictions)/float(test_batch_emotions.size)*100, '%')
+
+# print('\nPart 2.3.1 - Sentiments')
+# model = classifier.fit(X, train_batch_sentiments_indexed)
+# right_predictions = 0
+# for i, comment in enumerate(test):
+#     prediction = classifier.predict(comment)[0]
+#     if list_sentiments[int(prediction)] == test_batch_sentiments[i]:
+#         right_predictions += 1
+# print('# of right predictions: ', right_predictions, 'total tests: ', test_batch_sentiments.size, 'percentage accuracy: ', float(right_predictions)/float(test_batch_sentiments.size)*100, '%')
     
+
+print("\nPart 2.3.2 - Emotions")
+
+def split_into_words(line):
+    import re
+    word_regex_improved = r"(\w[\w']*\w|\w)"
+    word_matcher = re.compile(word_regex_improved)
+    return word_matcher.findall(line)
+
+split_comments = []
+count = 0
+for comment in text_comments:
+    split_comments.append(split_into_words(comment))
+    # count+=1
+    # if count == 13:
+    #     break
+
+print('print y')
+print(split_comments)
+
+
+le = preprocessing.LabelEncoder()
+## transform each word into numbers
+for line in split_comments:
+    for i in len(line):
+        le.fit_transform(line)
+
+print('The end')
+
+
+
 
