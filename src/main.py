@@ -6,7 +6,6 @@ from sklearn.model_selection import train_test_split
 from sklearn.naive_bayes import MultinomialNB
 from sklearn import preprocessing
 from sklearn import tree
-import graphviz 
 
 # install packages by running pip install -r requirements.txt
 
@@ -25,38 +24,38 @@ list_sentiments = np.array(list(sentiments.keys()))
 
 # Part 2.1
 # print("\nPart 2.1")
-vectorizer = CountVectorizer()
+# vectorizer = CountVectorizer()
 text_comments = np.array([comment[0] for comment in comments])
-cv_fit = vectorizer.fit_transform(text_comments)
-list_features = vectorizer.get_feature_names_out()
+# cv_fit = vectorizer.fit_transform(text_comments)
+# list_features = vectorizer.get_feature_names_out()
 # list_count = cv_fit.toarray().sum(axis=0)
 # features_count = dict(zip(list_features, list_count))
 # print("There are ", list_features.size, " different words in the Reddit comments\n")
 
 
 # Part 2.2
-print("\nPart 2.2")
+# print("\nPart 2.2")
 train_batch, test_batch = np.array(train_test_split(comments, train_size=0.8, test_size=0.2, shuffle=True), dtype=object)
 
 train_batch_comments = np.array([comment[0] for comment in train_batch])
 train_batch_emotions = np.array([comment[1] for comment in train_batch])
 train_batch_emotions_indexed = convert_label_to_index(train_batch_emotions, list_emotions)
-train_batch_sentiments = np.array([comment[2] for comment in train_batch])
-train_batch_sentiments_indexed = convert_label_to_index(train_batch_sentiments, list_sentiments)
+# train_batch_sentiments = np.array([comment[2] for comment in train_batch])
+# train_batch_sentiments_indexed = convert_label_to_index(train_batch_sentiments, list_sentiments)
 
-test_batch_comments = np.array([comment[0] for comment in test_batch])
-test_batch_emotions = np.array([comment[1] for comment in test_batch])
-test_batch_sentiments = np.array([comment[2] for comment in test_batch])
+# test_batch_comments = np.array([comment[0] for comment in test_batch])
+# test_batch_emotions = np.array([comment[1] for comment in test_batch])
+# test_batch_sentiments = np.array([comment[2] for comment in test_batch])
 
-print("full batch size: ", text_comments.size)
-print("train batch size: ", train_batch_comments.size)
-print("test batch size:", test_batch_comments.size)
+# print("full batch size: ", text_comments.size)
+# print("train batch size: ", train_batch_comments.size)
+# print("test batch size:", test_batch_comments.size)
 
-# Part 2.3
-print("\nPart 2.3")
-classifier = MultinomialNB()
-X = vectorizer.fit_transform(train_batch_comments)
-test = vectorizer.transform(test_batch_comments)
+# # Part 2.3
+# print("\nPart 2.3")
+# classifier = MultinomialNB()
+# X = vectorizer.fit_transform(train_batch_comments)
+# test = vectorizer.transform(test_batch_comments)
 
 
 # print('\nPart 2.3.1 - Emotions')
@@ -87,24 +86,20 @@ def split_into_words(line):
     return word_matcher.findall(line)
 
 split_comments = []
+encoded_comments = []
 count = 0
-for comment in text_comments:
+for comment in train_batch_comments:
     split_comments.append(split_into_words(comment))
-    # count+=1
-    # if count == 13:
-    #     break
-
-print('print y')
-print(split_comments)
-
 
 le = preprocessing.LabelEncoder()
-## transform each word into numbers
-for line in split_comments:
-    for i in len(line):
-        le.fit_transform(line)
 
-print('The end')
+# ## transform each word into numbers
+for comment in split_comments:
+    encoded_comments.append(le.fit_transform(comment))
+
+// why the f wont the fit work
+dtc = tree.DecisionTreeClassifier()
+dtc.fit(np.array(encoded_comments), train_batch_emotions)
 
 
 
