@@ -6,6 +6,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.naive_bayes import MultinomialNB
 from sklearn import preprocessing
 from sklearn import tree
+from sklearn.linear_model import Perceptron
 
 # install packages by running pip install -r requirements.txt
 
@@ -57,33 +58,31 @@ classifier = MultinomialNB()
 X = vectorizer.fit_transform(train_batch_comments)
 test = vectorizer.transform(test_batch_comments)
 
-print('\nPart 2.3.1 - Emotions')
-model = classifier.fit(X, train_batch_emotions_indexed)
-right_predictions = 0
-for i, comment in enumerate(test):
-    prediction = classifier.predict(comment)[0]
-    if list_emotions[int(prediction)] == test_batch_emotions[i]:
-        right_predictions += 1
-print('# of right predictions: ', right_predictions, 'total tests: ', test_batch_emotions.size, 'percentage accuracy: ', float(right_predictions)/float(test_batch_emotions.size)*100, '%')
+# print('\nPart 2.3.1 - Emotions')
+# model = classifier.fit(X, train_batch_emotions_indexed)
+# right_predictions = 0
+# for i, comment in enumerate(test):
+#     prediction = classifier.predict(comment)[0]
+#     if list_emotions[int(prediction)] == test_batch_emotions[i]:
+#         right_predictions += 1
+# print('# of right predictions: ', right_predictions, 'total tests: ', test_batch_emotions.size, 'percentage accuracy: ', float(right_predictions)/float(test_batch_emotions.size)*100, '%')
 
-print('\nPart 2.3.1 - Sentiments')
-model = classifier.fit(X, train_batch_sentiments_indexed)
-right_predictions = 0
-for i, comment in enumerate(test):
-    prediction = classifier.predict(comment)[0]
-    if list_sentiments[int(prediction)] == test_batch_sentiments[i]:
-        right_predictions += 1
-print('# of right predictions: ', right_predictions, 'total tests: ', test_batch_sentiments.size, 'percentage accuracy: ', float(right_predictions)/float(test_batch_sentiments.size)*100, '%')
-    
+# print('\nPart 2.3.1 - Sentiments')
+# model = classifier.fit(X, train_batch_sentiments_indexed)
+# right_predictions = 0
+# for i, comment in enumerate(test):
+#     prediction = classifier.predict(comment)[0]
+#     if list_sentiments[int(prediction)] == test_batch_sentiments[i]:
+#         right_predictions += 1
+# print('# of right predictions: ', right_predictions, 'total tests: ', test_batch_sentiments.size, 'percentage accuracy: ', float(right_predictions)/float(test_batch_sentiments.size)*100, '%')
 
 
 print("\nPart 2.3.2 - Emotions")
 
 dtc = tree.DecisionTreeClassifier()
+
 dtc.fit(X, train_batch_emotions)
-
 right_predictions = 0
-
 for i, comment in enumerate(test):
   prediction = dtc.predict(comment)
   if prediction[0] == test_batch_emotions[i]:
@@ -91,12 +90,30 @@ for i, comment in enumerate(test):
 print('# of right predictions: ', right_predictions, 'total tests: ', test_batch_emotions.size, 'percentage accuracy: ', float(right_predictions)/float(test_batch_emotions.size)*100, '%')  
 
 print("\nPart 2.3.2 - Sentiments")
-
 dtc.fit(X, train_batch_sentiments)
 right_predictions = 0
-
 for i, comment in enumerate(test):
     prediction = dtc.predict(comment)
+    if prediction[0] == test_batch_sentiments[i]:
+        right_predictions += 1
+print('# of right predictions: ', right_predictions, 'total tests: ', test_batch_sentiments.size, 'percentage accuracy: ', float(right_predictions)/float(test_batch_sentiments.size)*100, '%')
+
+print("\nPart 2.3.3 - Emotions")
+clf = Perceptron(random_state=1)
+clf.fit(X, train_batch_emotions)
+
+right_predictions = 0
+for i, comment in enumerate(test):
+  prediction = clf.predict(comment)
+  if prediction[0] == test_batch_emotions[i]:
+        right_predictions += 1
+print('# of right predictions: ', right_predictions, 'total tests: ', test_batch_emotions.size, 'percentage accuracy: ', float(right_predictions)/float(test_batch_emotions.size)*100, '%')  
+
+print("\nPart 2.3.3 - Sentiments")
+clf.fit(X, train_batch_sentiments)
+right_predictions = 0
+for i, comment in enumerate(test):
+    prediction = clf.predict(comment)
     if prediction[0] == test_batch_sentiments[i]:
         right_predictions += 1
 print('# of right predictions: ', right_predictions, 'total tests: ', test_batch_sentiments.size, 'percentage accuracy: ', float(right_predictions)/float(test_batch_sentiments.size)*100, '%')
