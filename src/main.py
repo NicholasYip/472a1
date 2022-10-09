@@ -27,10 +27,10 @@ list_sentiments = np.array(list(sentiments.keys()))
 vectorizer = CountVectorizer()
 text_comments = np.array([comment[0] for comment in comments])
 cv_fit = vectorizer.fit_transform(text_comments)
-list_features = vectorizer.get_feature_names_out()
-list_count = cv_fit.toarray().sum(axis=0)
-features_count = dict(zip(list_features, list_count))
-print("There are ", list_features.size, " different words in the Reddit comments\n")
+# list_features = vectorizer.get_feature_names_out()
+# list_count = cv_fit.toarray().sum(axis=0)
+# features_count = dict(zip(list_features, list_count))
+# print("There are ", list_features.size, " different words in the Reddit comments\n")
 
 
 # Part 2.2
@@ -56,6 +56,26 @@ print("\nPart 2.3")
 classifier = MultinomialNB()
 X = vectorizer.fit_transform(train_batch_comments)
 test = vectorizer.transform(test_batch_comments)
+
+print('\nPart 2.3.1 - Emotions')
+model = classifier.fit(X, train_batch_emotions_indexed)
+right_predictions = 0
+for i, comment in enumerate(test):
+    prediction = classifier.predict(comment)[0]
+    if list_emotions[int(prediction)] == test_batch_emotions[i]:
+        right_predictions += 1
+print('# of right predictions: ', right_predictions, 'total tests: ', test_batch_emotions.size, 'percentage accuracy: ', float(right_predictions)/float(test_batch_emotions.size)*100, '%')
+
+print('\nPart 2.3.1 - Sentiments')
+model = classifier.fit(X, train_batch_sentiments_indexed)
+right_predictions = 0
+for i, comment in enumerate(test):
+    prediction = classifier.predict(comment)[0]
+    if list_sentiments[int(prediction)] == test_batch_sentiments[i]:
+        right_predictions += 1
+print('# of right predictions: ', right_predictions, 'total tests: ', test_batch_sentiments.size, 'percentage accuracy: ', float(right_predictions)/float(test_batch_sentiments.size)*100, '%')
+    
+
 
 print("\nPart 2.3.2 - Emotions")
 
