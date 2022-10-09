@@ -77,17 +77,17 @@ test = vectorizer.transform(test_batch_comments)
 # print('# of right predictions: ', right_predictions, 'total tests: ', test_batch_sentiments.size, 'percentage accuracy: ', float(right_predictions)/float(test_batch_sentiments.size)*100, '%')
 
 
-print("\nPart 2.3.2 - Emotions")
+# print("\nPart 2.3.2 - Emotions")
 
 dtc = tree.DecisionTreeClassifier()
 
-dtc.fit(X, train_batch_emotions)
-right_predictions = 0
-for i, comment in enumerate(test):
-  prediction = dtc.predict(comment)
-  if prediction[0] == test_batch_emotions[i]:
-        right_predictions += 1
-print('# of right predictions: ', right_predictions, 'total tests: ', test_batch_emotions.size, 'percentage accuracy: ', float(right_predictions)/float(test_batch_emotions.size)*100, '%')  
+# dtc.fit(X, train_batch_emotions)
+# right_predictions = 0
+# for i, comment in enumerate(test):
+#   prediction = dtc.predict(comment)
+#   if prediction[0] == test_batch_emotions[i]:
+#         right_predictions += 1
+# print('# of right predictions: ', right_predictions, 'total tests: ', test_batch_emotions.size, 'percentage accuracy: ', float(right_predictions)/float(test_batch_emotions.size)*100, '%')  
 
 print("\nPart 2.3.2 - Sentiments")
 dtc.fit(X, train_batch_sentiments)
@@ -98,22 +98,62 @@ for i, comment in enumerate(test):
         right_predictions += 1
 print('# of right predictions: ', right_predictions, 'total tests: ', test_batch_sentiments.size, 'percentage accuracy: ', float(right_predictions)/float(test_batch_sentiments.size)*100, '%')
 
-print("\nPart 2.3.3 - Emotions")
-clf = Perceptron(random_state=1)
-clf.fit(X, train_batch_emotions)
+# print("\nPart 2.3.3 - Emotions")
+# clf = Perceptron(random_state=1)
+# clf.fit(X, train_batch_emotions)
 
+# right_predictions = 0
+# for i, comment in enumerate(test):
+#   prediction = clf.predict(comment)
+#   if prediction[0] == test_batch_emotions[i]:
+#         right_predictions += 1
+# print('# of right predictions: ', right_predictions, 'total tests: ', test_batch_emotions.size, 'percentage accuracy: ', float(right_predictions)/float(test_batch_emotions.size)*100, '%')  
+
+# print("\nPart 2.3.3 - Sentiments")
+# clf.fit(X, train_batch_sentiments)
+# right_predictions = 0
+# for i, comment in enumerate(test):
+#     prediction = clf.predict(comment)
+#     if prediction[0] == test_batch_sentiments[i]:
+#         right_predictions += 1
+# print('# of right predictions: ', right_predictions, 'total tests: ', test_batch_sentiments.size, 'percentage accuracy: ', float(right_predictions)/float(test_batch_sentiments.size)*100, '%')
+
+
+print("\nPart 2.3.5 - Emotions")
+from sklearn.model_selection import GridSearchCV
+search_space = {
+    "criterion" : ["gini","entropy"],
+    "max_depth" : [5,15],
+    "min_samples_split": [2,4,6]
+}
+
+gs = GridSearchCV(estimator=dtc, param_grid=search_space)
+gs.fit(X, train_batch_emotions)
+best_dtc_hyperparam = gs.best_params_
+print(gs.best_params_)
+
+dtc_improved = tree.DecisionTreeClassifier(criterion=best_dtc_hyperparam["criterion"], max_depth = best_dtc_hyperparam["max_depth"], min_samples_split = best_dtc_hyperparam["min_samples_split"])
+
+improved_model = dtc_improved.fit(X,train_batch_emotions)
 right_predictions = 0
 for i, comment in enumerate(test):
-  prediction = clf.predict(comment)
+  prediction = improved_model.predict(comment)
   if prediction[0] == test_batch_emotions[i]:
         right_predictions += 1
-print('# of right predictions: ', right_predictions, 'total tests: ', test_batch_emotions.size, 'percentage accuracy: ', float(right_predictions)/float(test_batch_emotions.size)*100, '%')  
+print('# of right predictions: ', right_predictions, 'total tests: ', test_batch_emotions.size, 'percentage accuracy: ', float(right_predictions)/float(test_batch_emotions.size)*100, '%') 
 
-print("\nPart 2.3.3 - Sentiments")
-clf.fit(X, train_batch_sentiments)
+print("\nPart 2.3.5 - Sentiments")
+gs.fit(X, train_batch_sentiments)
+best_dtc_hyperparam = gs.best_params_
+print(gs.best_params_)
+
+dtc_improved = tree.DecisionTreeClassifier(criterion=best_dtc_hyperparam["criterion"], max_depth = best_dtc_hyperparam["max_depth"], min_samples_split = best_dtc_hyperparam["min_samples_split"])
+improved_model = dtc_improved.fit(X,train_batch_sentiments)
 right_predictions = 0
 for i, comment in enumerate(test):
-    prediction = clf.predict(comment)
+    prediction = improved_model.predict(comment)
     if prediction[0] == test_batch_sentiments[i]:
         right_predictions += 1
 print('# of right predictions: ', right_predictions, 'total tests: ', test_batch_sentiments.size, 'percentage accuracy: ', float(right_predictions)/float(test_batch_sentiments.size)*100, '%')
+
+
