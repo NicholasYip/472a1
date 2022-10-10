@@ -4,7 +4,6 @@ import numpy as np
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.model_selection import train_test_split
 from sklearn.naive_bayes import MultinomialNB
-from sklearn import preprocessing
 from sklearn import tree
 from sklearn.linear_model import Perceptron
 
@@ -123,8 +122,12 @@ print("\nPart 2.3.5 - Emotions")
 from sklearn.model_selection import GridSearchCV
 search_space = {
     "criterion" : ["gini","entropy"],
-    "max_depth" : [5,15],
-    "min_samples_split": [2,4,6]
+    "max_depth" : [100,700],
+    "min_samples_split": [2,3,10]
+
+    # "criterion" : ["gini"],
+    # "max_depth" : [700],
+    # "min_samples_split": [2]
 }
 
 gs = GridSearchCV(estimator=dtc, param_grid=search_space)
