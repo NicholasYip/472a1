@@ -5,7 +5,8 @@ from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.model_selection import train_test_split
 from sklearn.naive_bayes import MultinomialNB
 from sklearn import tree
-from sklearn.linear_model import Perceptron
+from sklearn.neural_network import MLPClassifier
+from sklearn.model_selection import GridSearchCV
 
 # install packages by running pip install -r requirements.txt
 
@@ -78,7 +79,7 @@ test = vectorizer.transform(test_batch_comments)
 
 # print("\nPart 2.3.2 - Emotions")
 
-dtc = tree.DecisionTreeClassifier()
+# dtc = tree.DecisionTreeClassifier()
 
 # dtc.fit(X, train_batch_emotions)
 # right_predictions = 0
@@ -88,56 +89,98 @@ dtc = tree.DecisionTreeClassifier()
 #         right_predictions += 1
 # print('# of right predictions: ', right_predictions, 'total tests: ', test_batch_emotions.size, 'percentage accuracy: ', float(right_predictions)/float(test_batch_emotions.size)*100, '%')  
 
-print("\nPart 2.3.2 - Sentiments")
-dtc.fit(X, train_batch_sentiments)
-right_predictions = 0
-for i, comment in enumerate(test):
-    prediction = dtc.predict(comment)
-    if prediction[0] == test_batch_sentiments[i]:
-        right_predictions += 1
-print('# of right predictions: ', right_predictions, 'total tests: ', test_batch_sentiments.size, 'percentage accuracy: ', float(right_predictions)/float(test_batch_sentiments.size)*100, '%')
+# tree_prediction = dtc.predict(X)
 
-# print("\nPart 2.3.3 - Emotions")
-# clf = Perceptron(random_state=1)
-# clf.fit(X, train_batch_emotions)
 
+
+# print("\nPart 2.3.2 - Sentiments")
+# dtc.fit(X, train_batch_sentiments)
 # right_predictions = 0
 # for i, comment in enumerate(test):
-#   prediction = clf.predict(comment)
-#   if prediction[0] == test_batch_emotions[i]:
-#         right_predictions += 1
-# print('# of right predictions: ', right_predictions, 'total tests: ', test_batch_emotions.size, 'percentage accuracy: ', float(right_predictions)/float(test_batch_emotions.size)*100, '%')  
-
-# print("\nPart 2.3.3 - Sentiments")
-# clf.fit(X, train_batch_sentiments)
-# right_predictions = 0
-# for i, comment in enumerate(test):
-#     prediction = clf.predict(comment)
+#     prediction = dtc.predict(comment)
 #     if prediction[0] == test_batch_sentiments[i]:
 #         right_predictions += 1
 # print('# of right predictions: ', right_predictions, 'total tests: ', test_batch_sentiments.size, 'percentage accuracy: ', float(right_predictions)/float(test_batch_sentiments.size)*100, '%')
 
 
-print("\nPart 2.3.5 - Emotions")
-from sklearn.model_selection import GridSearchCV
-search_space = {
-    "criterion" : ["gini","entropy"],
-    "max_depth" : [100,700],
-    "min_samples_split": [2,3,10]
+print("\nPart 2.3.3 - Emotions")
+# Cannot run the function bellow without max_iter or else it would take years to get an output. 
+# clf = MLPClassifier(random_state=1)
+clf = MLPClassifier(random_state=1, max_iter=5)
+clf.fit(X, train_batch_emotions)
 
-    # "criterion" : ["gini"],
-    # "max_depth" : [700],
-    # "min_samples_split": [2]
+right_predictions = 0
+for i, comment in enumerate(test):
+  prediction = clf.predict(comment)
+  if prediction[0] == test_batch_emotions[i]:
+        right_predictions += 1
+print('# of right predictions: ', right_predictions, 'total tests: ', test_batch_emotions.size, 'percentage accuracy: ', float(right_predictions)/float(test_batch_emotions.size)*100, '%')  
+
+print("\nPart 2.3.3 - Sentiments")
+clf.fit(X, train_batch_sentiments)
+right_predictions = 0
+for i, comment in enumerate(test):
+    prediction = clf.predict(comment)
+    if prediction[0] == test_batch_sentiments[i]:
+        right_predictions += 1
+print('# of right predictions: ', right_predictions, 'total tests: ', test_batch_sentiments.size, 'percentage accuracy: ', float(right_predictions)/float(test_batch_sentiments.size)*100, '%')
+
+
+# print("\nPart 2.3.5 - Emotions")
+# search_space = {
+#     "criterion" : ["gini","entropy"],
+#     "max_depth" : [100,700],
+#     "min_samples_split": [2,3,10]
+
+#     # "criterion" : ["gini"],
+#     # "max_depth" : [700],
+#     # "min_samples_split": [2]
+# }
+
+# gs = GridSearchCV(estimator=dtc, param_grid=search_space)
+# gs.fit(X, train_batch_emotions)
+# best_dtc_hyperparam = gs.best_params_
+# print(gs.best_params_)
+
+# dtc_improved = tree.DecisionTreeClassifier(criterion=best_dtc_hyperparam["criterion"], max_depth = best_dtc_hyperparam["max_depth"], min_samples_split = best_dtc_hyperparam["min_samples_split"])
+
+# improved_model = dtc_improved.fit(X,train_batch_emotions)
+# right_predictions = 0
+# for i, comment in enumerate(test):
+#   prediction = improved_model.predict(comment)
+#   if prediction[0] == test_batch_emotions[i]:
+#         right_predictions += 1
+# print('# of right predictions: ', right_predictions, 'total tests: ', test_batch_emotions.size, 'percentage accuracy: ', float(right_predictions)/float(test_batch_emotions.size)*100, '%') 
+
+# print("\nPart 2.3.5 - Sentiments")
+# gs.fit(X, train_batch_sentiments)
+# best_dtc_hyperparam = gs.best_params_
+# print(gs.best_params_)
+
+# dtc_improved = tree.DecisionTreeClassifier(criterion=best_dtc_hyperparam["criterion"], max_depth = best_dtc_hyperparam["max_depth"], min_samples_split = best_dtc_hyperparam["min_samples_split"])
+# improved_model = dtc_improved.fit(X,train_batch_sentiments)
+# right_predictions = 0
+# for i, comment in enumerate(test):
+#     prediction = improved_model.predict(comment)
+#     if prediction[0] == test_batch_sentiments[i]:
+#         right_predictions += 1
+# print('# of right predictions: ', right_predictions, 'total tests: ', test_batch_sentiments.size, 'percentage accuracy: ', float(right_predictions)/float(test_batch_sentiments.size)*100, '%')
+
+
+print("\nPart 2.3.6 - Emotions")
+search_space = {
+    "activation" : ["sigmoid","tanh","relu","identity"],
+    "hidden_layer_sizes" : [(10,10,10),(30,50)],
+    "solver": ["adam","sgd"]
 }
 
-gs = GridSearchCV(estimator=dtc, param_grid=search_space)
+gs = GridSearchCV(estimator=clf, param_grid=search_space)
 gs.fit(X, train_batch_emotions)
-best_dtc_hyperparam = gs.best_params_
+best_clf_hyperparam = gs.best_params_
 print(gs.best_params_)
 
-dtc_improved = tree.DecisionTreeClassifier(criterion=best_dtc_hyperparam["criterion"], max_depth = best_dtc_hyperparam["max_depth"], min_samples_split = best_dtc_hyperparam["min_samples_split"])
-
-improved_model = dtc_improved.fit(X,train_batch_emotions)
+clf_improved = tree.DecisionTreeClassifier(activation=best_clf_hyperparam["activation"], hidden_layer_sizes = best_clf_hyperparam["hidden_layer_sizes"], solver = best_clf_hyperparam["solver"])
+improved_model = clf_improved.fit(X,train_batch_emotions)
 right_predictions = 0
 for i, comment in enumerate(test):
   prediction = improved_model.predict(comment)
@@ -145,18 +188,17 @@ for i, comment in enumerate(test):
         right_predictions += 1
 print('# of right predictions: ', right_predictions, 'total tests: ', test_batch_emotions.size, 'percentage accuracy: ', float(right_predictions)/float(test_batch_emotions.size)*100, '%') 
 
-print("\nPart 2.3.5 - Sentiments")
+
+print("\nPart 2.3.6 - Sentiments")
 gs.fit(X, train_batch_sentiments)
-best_dtc_hyperparam = gs.best_params_
+best_clf_hyperparam = gs.best_params_
 print(gs.best_params_)
 
-dtc_improved = tree.DecisionTreeClassifier(criterion=best_dtc_hyperparam["criterion"], max_depth = best_dtc_hyperparam["max_depth"], min_samples_split = best_dtc_hyperparam["min_samples_split"])
-improved_model = dtc_improved.fit(X,train_batch_sentiments)
+clf_improved = tree.DecisionTreeClassifier(activation=best_clf_hyperparam["activation"], hidden_layer_sizes = best_clf_hyperparam["hidden_layer_sizes"], solver = best_clf_hyperparam["solver"])
+improved_model = clf_improved.fit(X,train_batch_emotions)
 right_predictions = 0
 for i, comment in enumerate(test):
     prediction = improved_model.predict(comment)
     if prediction[0] == test_batch_sentiments[i]:
         right_predictions += 1
 print('# of right predictions: ', right_predictions, 'total tests: ', test_batch_sentiments.size, 'percentage accuracy: ', float(right_predictions)/float(test_batch_sentiments.size)*100, '%')
-
-
