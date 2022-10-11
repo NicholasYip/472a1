@@ -33,3 +33,6 @@ def convert_label_to_index(arr, labels):
     for i, element in enumerate(arr):
         converted_arr[i] = np.where(labels == element)[0][0]
     return converted_arr
+
+def performance_output(f, model, classification, hyperparameter, hyper_value, confusion_matrix):
+    f.write("Model: %s\nClassification: %s\nHyperparameter: %s = %s\nConfusion matrix:\n %s\n" %(model, classification, hyperparameter, hyper_value, confusion_matrix));
