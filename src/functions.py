@@ -1,6 +1,7 @@
-from matplotlib import pyplot as plt
 from pathlib import Path
+
 import numpy as np
+from matplotlib import pyplot as plt
 
 
 def get_static_file(file_name):
@@ -27,6 +28,7 @@ def print_graph(labels_dict, y_label, save_name='default.pdf'):
     plt.barh(x_axis, y_axis)  # printed vertically to better show the labels
     plt.savefig(get_static_file(save_name), bbox_inches="tight")
     plt.show()
+
 
 def convert_label_to_index(arr, labels):
     converted_arr = np.zeros(arr.size)
