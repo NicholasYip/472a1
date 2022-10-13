@@ -1,0 +1,13 @@
+number,classifier,label,accuracy(0.8/0.2),accuracy(0.6/0.4),accuracy(0.4/0.6)
+2.3.1,Base-MNB,emotions,,
+2.3.1,Base-MNB,sentiments,,
+2.3.2,Base-DT,emotions,,
+2.3.2,Base-DT,sentiments,,,
+2.3.3,Base-MLP,emotions,,,
+2.3.3,Base-MLP,sentiments,,,
+2.3.4,Top-MNB,emotions,,,
+2.3.4,Top-MNB,sentiments,,,
+2.3.5,Top-DT,emotions,,,
+2.3.5,Top-DT,sentiments,,,
+2.3.6,Top-MLP,emotions,,,
+2.3.6,Top-MLP,sentiments,,,
