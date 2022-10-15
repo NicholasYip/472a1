@@ -1,7 +1,7 @@
 import json
 import numpy as np
 
-from src.functions import get_static_file, count_labels, print_graph
+from functions import get_static_file, count_labels, print_graph
 
 
 def part1_2():
