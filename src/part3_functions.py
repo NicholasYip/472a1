@@ -1,20 +1,22 @@
 import gensim.downloader as api
 import numpy as np
-from nltk import tokenize, word_tokenize
-from sklearn.feature_extraction.text import CountVectorizer
-from sklearn.model_selection import GridSearchCV
+from nltk import word_tokenize
+from sklearn.metrics import confusion_matrix, classification_report
 from sklearn.neural_network import MLPClassifier
-
+from src.functions import performance_output
 
 # import nltk
 # nltk.download('punkt')
 
 
-def part3(train_batch_items, test_batch_items):
+def part3_1(pretrained_model):
     print("\nPart 3.1")
-    model = api.load("word2vec-google-news-300")
-    print("Pretrained word2vec-google-news-300 model loaded")
+    model = api.load(pretrained_model)
+    print("Pretrained", pretrained_model, "model loaded")
+    return model
 
+
+def part3_2(train_batch_items, test_batch_items):
     print("\nPart 3.2")
     train_tokenized_comments = [word_tokenize(i) for i in train_batch_items.get("train_batch_comments")]
     train_unique_tokenized_comments = set([item for sublist in train_tokenized_comments for item in sublist])
@@ -26,62 +28,94 @@ def part3(train_batch_items, test_batch_items):
 
     print("There are", number_train_unique_tokens, "different unique tokens in the training set")
 
+    train_tokenized_items = {
+        "train_tokenized_comments": train_tokenized_comments,
+        "train_unique_tokenized_comments": train_unique_tokenized_comments,
+        "number_train_unique_tokens": number_train_unique_tokens
+    }
+    test_tokenized_items = {
+        "test_tokenized_comments": test_tokenized_comments,
+        "test_unique_tokenized_comments": test_unique_tokenized_comments,
+        "number_test_unique_tokens": number_test_unique_tokens
+    }
+    return train_tokenized_items, test_tokenized_items
+
+
+def part3_3(model, train_tokenized_items, test_tokenized_items):
     print("\nPart 3.3")
-    train_embedded_comments = np.zeros(train_tokenized_comments.size)
-    for i, tokenized_comment in enumerate(train_tokenized_comments):
-        train_embedded_comments[i] = model.get_mean_vector(tokenized_comment)
+    train_embedded_comments = np.array(
+        [model.get_mean_vector(tokenized_comment) for tokenized_comment in
+         train_tokenized_items.get("train_tokenized_comments")])
+    test_embedded_comments = np.array(
+        [model.get_mean_vector(tokenized_comment) for tokenized_comment in
+         test_tokenized_items.get("test_tokenized_comments")])
 
-    test_embedded_comments = np.zeros(test_tokenized_comments.size)
-    for i, tokenized_comment in enumerate(test_tokenized_comments):
-        test_embedded_comments[i] = model.get_mean_vector(tokenized_comment)
+    return train_embedded_comments, test_embedded_comments
 
+
+def part3_4(model, train_tokenized_items, test_tokenized_items):
     print("\nPart 3.4")
     counter = 0
-    for word in train_unique_tokenized_comments:
+    for word in train_tokenized_items.get("train_unique_tokenized_comments"):
         if model.__contains__(word):
             counter = counter + 1
     print(counter, "words in the training set have an embedding found in Word2Vec, out of a total of",
-          number_train_unique_tokens, ", which is", counter / number_train_unique_tokens, "%")
+          train_tokenized_items.get("number_train_unique_tokens"), ", which is",
+          counter / train_tokenized_items.get("number_train_unique_tokens"), "%")
 
     counter = 0
-    for word in test_unique_tokenized_comments:
+    for word in test_tokenized_items.get("test_unique_tokenized_comments"):
         if model.__contains__(word):
             counter = counter + 1
     print(counter, "words in the test set have an embedding found in Word2Vec out of a total of ",
-          number_test_unique_tokens, ", which is", counter / number_test_unique_tokens, "%")
+          test_tokenized_items.get("number_test_unique_tokens"), ", which is",
+          counter / test_tokenized_items.get("number_test_unique_tokens"), "%")
 
-    vectorizer = CountVectorizer()
-    X = vectorizer.fit_transform(train_embedded_comments)
-    clf = MLPClassifier(random_state=1, max_iter=2)
+
+def part3_5(train_embedded_comments, test_embedded_comments, train_batch_items, test_batch_items, list_emotions,
+            list_sentiments, f, model_name):
+    clf = MLPClassifier(random_state=1, max_iter=5)
 
     print('\n Part 3.5 - Emotions')
-    clf.fit(X, train_batch_items.get("train_batch_emotions"))
+    hyperparameter = {"activation": "relu", "solver": "adam", "hidden_layer_sizes": "100"}
+    clf.fit(train_embedded_comments, train_batch_items.get("train_batch_emotions"))
+    predictions_emotions = np.array([clf.predict([comment])[0] for comment in test_embedded_comments])
+    confusionMatrix = confusion_matrix(test_batch_items['test_batch_emotions'], predictions_emotions,
+                                       labels=list_emotions)
+    performance_output(f, "Base-MLP - " + model_name, "Emotions", hyperparameter, confusionMatrix,
+                       classification_report(test_batch_items['test_batch_emotions'], predictions_emotions))
 
     print('\n Part 3.5 - Sentiments')
-    clf.fit(X, train_batch_items.get("train_batch_sentiments"))
+    clf.fit(train_embedded_comments, train_batch_items.get("train_batch_sentiments"))
+    predictions_sentiments = np.array([clf.predict([comment])[0] for comment in test_embedded_comments])
+    confusionMatrix = confusion_matrix(test_batch_items['test_batch_sentiments'], predictions_sentiments,
+                                       labels=list_sentiments)
+    performance_output(f, "Base-MLP - " + model_name, "Sentiments", hyperparameter, confusionMatrix,
+                       classification_report(test_batch_items['test_batch_sentiments'], predictions_sentiments))
 
 
-    search_space = {
-        "activation": ["relu"],
-        "hidden_layer_sizes": [(10, 10, 10), (30, 50)],
-        "solver": ["adam", "sgd"]
+def part3_6(train_embedded_comments, test_embedded_comments, train_batch_items, test_batch_items, list_emotions,
+            list_sentiments, f, model_name):
+    clf_params = {
+        "activation": "relu",
+        "hidden_layer_sizes": (30, 50),
+        "solver": "adam"
     }
-    gs = GridSearchCV(estimator=clf, param_grid=search_space)
+    clf_improved = MLPClassifier(activation=clf_params["activation"],
+                                 hidden_layer_sizes=clf_params["hidden_layer_sizes"],
+                                 solver=clf_params["solver"])
+    print("\nPart 3.6 - Sentiments")
+    clf_improved.fit(train_embedded_comments, train_batch_items.get("train_batch_sentiments"))
+    predictions_sentiments = np.array([clf_improved.predict([comment])[0] for comment in test_embedded_comments])
+    confusionMatrix = confusion_matrix(test_batch_items['test_batch_sentiments'], predictions_sentiments,
+                                       labels=list_sentiments)
+    performance_output(f, "Top-MLP - " + model_name, "Sentiments", clf_params, confusionMatrix,
+                       classification_report(test_batch_items['test_batch_sentiments'], predictions_sentiments))
 
-    print("\nPart 2.3.6 - Emotions")
-    gs.fit(X, train_batch_items.get("train_batch_emotions"))
-    best_clf_hyperparam = gs.best_params_
-    print(best_clf_hyperparam)
-    # clf_improved = MLPClassifier(activation=best_clf_hyperparam["activation"],
-    #                              hidden_layer_sizes=best_clf_hyperparam["hidden_layer_sizes"],
-    #                              solver=best_clf_hyperparam["solver"])
-    # improved_model = clf_improved.fit(X, train_batch_items.get("train_batch_emotions"))
-
-    print("\nPart 2.3.6 - Sentiments")
-    gs.fit(X, train_batch_items.get("train_batch_sentiments"))
-    best_clf_hyperparam = gs.best_params_activation
-    print(best_clf_hyperparam)
-    # clf_improved = MLPClassifier(activation=best_clf_hyperparam[""],
-    #                              hidden_layer_sizes=best_clf_hyperparam["hidden_layer_sizes"],
-    #                              solver=best_clf_hyperparam["solver"])
-    # improved_model = clf_improved.fit(X, train_batch_items.get("train_batch_emotions"))
+    print("\nPart 3.6 - Emotions")
+    clf_improved.fit(train_embedded_comments, train_batch_items.get("train_batch_emotions"))
+    predictions_emotions = np.array([clf_improved.predict([comment])[0] for comment in test_embedded_comments])
+    confusionMatrix = confusion_matrix(test_batch_items['test_batch_emotions'], predictions_emotions,
+                                       labels=list_emotions)
+    performance_output(f, "Top-MLP - " + model_name, "Emotions", clf_params, confusionMatrix,
+                       classification_report(test_batch_items['test_batch_emotions'], predictions_emotions))
