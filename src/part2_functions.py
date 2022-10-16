@@ -15,7 +15,7 @@ def part2_1(comments):
     list_features = vectorizer.get_feature_names_out()
     # list_count = cv_fit.toarray().sum(axis=0)
     # features_count = dict(zip(list_features, list_count))
-    print("There are ", list_features.size, " different words in the Reddit comments\n")
+    print("There are ", list_features.size, " different words in the Reddit comments")
 
 
 def part2_2(comments, proportion_split):
