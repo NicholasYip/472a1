@@ -1,6 +1,5 @@
 import json
 import numpy as np
-
 from functions import get_static_file, count_labels, print_graph
 
 
