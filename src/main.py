@@ -1,10 +1,10 @@
 from part1_functions import part1_2, part1_3
 from part2_functions import part2_1, part2_2, part2_3_1, part2_3_4, part2_3_3, part2_3_2, part2_3_5, part2_3_6
-from part3_functions import part3_1, part3_2, part3_3, part3_4, part3_5, part3_6
+# from part3_functions import part3_1, part3_2, part3_3, part3_4, part3_5, part3_6
 
 # install packages by running pip install -r requirements.txt
 
-f = open("./static/performance.txt", "w+")
+f = open("./static/performance.txt", "a")
 model_name = "word2vec-google-news-300"
 
 comments = part1_2()

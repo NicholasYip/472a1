@@ -236,7 +236,7 @@ def part2_3_6(train_batch_items, test_batch_items, list_emotions, list_sentiment
     clf_improved = MLPClassifier(activation=best_clf_hyperparam["activation"],
                                  hidden_layer_sizes=best_clf_hyperparam["hidden_layer_sizes"],
                                  solver=best_clf_hyperparam["solver"], max_iter=5)
-    clf_improved.fit(X, train_batch_items.get("train_batch_emotions"))
+    clf_improved.fit(X, train_batch_items.get("train_batch_sentiments"))
     predictions_sentiments = np.array([clf_improved.predict(comment)[0] for comment in test_batch])
     confusionMatrix = confusion_matrix(test_batch_items['test_batch_sentiments'], predictions_sentiments,
                                        labels=list_sentiments)

@@ -949,34 +949,18 @@ Model: Top-MLP
 Classification: Sentiments
 Hyperparameter: {'activation': 'logistic', 'hidden_layer_sizes': (30, 50), 'solver': 'adam'}
 Confusion matrix:
- [[    0 11786     0     0]
- [    0 19426     0     0]
- [    0 10657     0     0]
- [    0  6387     0     0]]
+ [[ 8949  4160  1740   578]
+ [ 4405 11957  4610  1198]
+ [ 2275  4820 15966   573]
+ [ 1324  3066  1246  1861]]
 Evaluation Metrics:
-                precision    recall  f1-score   support
+              precision    recall  f1-score   support
 
-    admiration       0.00      0.00      0.00         0
-     ambiguous       0.00      0.00      0.00      7575
-     amusement       0.00      0.00      0.00         0
-         anger       0.00      0.00      0.00         0
-     annoyance       0.00      0.00      0.00         0
-      approval       0.00      0.00      0.00         0
-     confusion       0.00      0.00      0.00         0
-     curiosity       0.00      0.00      0.00         0
-disappointment       0.00      0.00      0.00         0
-   disapproval       0.00      0.00      0.00         0
-     gratitude       0.00      0.00      0.00         0
-           joy       0.00      0.00      0.00         0
-          love       0.00      0.00      0.00         0
-      negative       0.00      0.00      0.00     15427
-       neutral       0.40      0.88      0.55     22187
-      optimism       0.00      0.00      0.00         0
-      positive       0.00      0.00      0.00     23539
-       remorse       0.00      0.00      0.00         0
-       sadness       0.00      0.00      0.00         0
-      surprise       0.00      0.00      0.00         0
+   ambiguous       0.44      0.25      0.32      7497
+    negative       0.53      0.58      0.55     15427
+     neutral       0.50      0.54      0.52     22170
+    positive       0.68      0.68      0.68     23634
 
-      accuracy                           0.28     68728
-     macro avg       0.02      0.04      0.03     68728
-  weighted avg       0.13      0.28      0.18     68728
+    accuracy                           0.56     68728
+   macro avg       0.54      0.51      0.52     68728
+weighted avg       0.56      0.56      0.56     68728

@@ -977,28 +977,18 @@ Model: Top-MLP
 Classification: Sentiments
 Hyperparameter: {'activation': 'logistic', 'hidden_layer_sizes': (30, 50), 'solver': 'adam'}
 Confusion matrix:
- [[    0 21420     0     0]
- [    0 30616     0     0]
- [    0 18568     0     0]
- [    0 10673     0     0]]
+ [[11928  7576  2771   807]
+ [ 5419 19748  6413  1649]
+ [ 2923  8674 22939   853]
+ [ 1700  5343  1808  2541]]
 Evaluation Metrics:
               precision    recall  f1-score   support
 
-  admiration       0.00      0.00      0.00         0
-   ambiguous       0.00      0.00      0.00     11442
-   amusement       0.00      0.00      0.00         0
-       anger       0.00      0.00      0.00         0
-   annoyance       0.00      0.00      0.00         0
-    approval       0.00      0.00      0.00         0
- disapproval       0.00      0.00      0.00         0
-   gratitude       0.00      0.00      0.00         0
-         joy       0.00      0.00      0.00         0
-        love       0.00      0.00      0.00         0
-    negative       0.00      0.00      0.00     22997
-     neutral       0.38      0.92      0.53     33272
-    positive       0.00      0.00      0.00     35381
-     sadness       0.00      0.00      0.00         0
+   ambiguous       0.43      0.22      0.29     11392
+    negative       0.54      0.52      0.53     23082
+     neutral       0.48      0.59      0.53     33229
+    positive       0.68      0.65      0.66     35389
 
-    accuracy                           0.30    103092
-   macro avg       0.03      0.07      0.04    103092
-weighted avg       0.12      0.30      0.17    103092
+    accuracy                           0.55    103092
+   macro avg       0.53      0.50      0.50    103092
+weighted avg       0.56      0.55      0.55    103092

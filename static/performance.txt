@@ -667,38 +667,23 @@ Model: Top-MLP
 Classification: Sentiments
 Hyperparameter: {'activation': 'logistic', 'hidden_layer_sizes': (30, 50), 'solver': 'adam'}
 Confusion matrix:
- [[   0 5545    0    0]
- [   0 9563    0    0]
- [   0 5507    0    0]
- [   0 3048    0    0]]
+ [[4497 1995  970  296]
+ [2030 5953 2452  596]
+ [ 984 2302 8244  291]
+ [ 604 1479  678  993]]
 Evaluation Metrics:
               precision    recall  f1-score   support
 
-  admiration       0.00      0.00      0.00         0
-   ambiguous       0.00      0.00      0.00      3824
-   amusement       0.00      0.00      0.00         0
-       anger       0.00      0.00      0.00         0
-   annoyance       0.00      0.00      0.00         0
-    approval       0.00      0.00      0.00         0
-      caring       0.00      0.00      0.00         0
-   confusion       0.00      0.00      0.00         0
-   curiosity       0.00      0.00      0.00         0
- disapproval       0.00      0.00      0.00         0
-  excitement       0.00      0.00      0.00         0
-   gratitude       0.00      0.00      0.00         0
-         joy       0.00      0.00      0.00         0
-        love       0.00      0.00      0.00         0
-    negative       0.00      0.00      0.00      7597
-     neutral       0.40      0.87      0.55     11047
-    optimism       0.00      0.00      0.00         0
-    positive       0.00      0.00      0.00     11896
-     remorse       0.00      0.00      0.00         0
-     sadness       0.00      0.00      0.00         0
-    surprise       0.00      0.00      0.00         0
+   ambiguous       0.46      0.26      0.33      3754
+    negative       0.55      0.58      0.57      7758
+     neutral       0.51      0.54      0.52     11031
+    positive       0.67      0.70      0.68     11821
 
-    accuracy                           0.28     34364
-   macro avg       0.02      0.04      0.03     34364
-weighted avg       0.13      0.28      0.18     34364
+    accuracy                           0.57     34364
+   macro avg       0.55      0.52      0.53     34364
+weighted avg       0.57      0.57      0.57     34364
+
+
 Model: Base-MLP - word2vec-google-news-300
 Classification: Emotions
 Hyperparameter: {'activation': 'relu', 'solver': 'adam', 'hidden_layer_sizes': '100'}
@@ -927,3 +912,4 @@ disappointment       0.19      0.01      0.01       916
       accuracy                           0.42     34364
      macro avg       0.35      0.20      0.22     34364
   weighted avg       0.38      0.42      0.34     34364
+
