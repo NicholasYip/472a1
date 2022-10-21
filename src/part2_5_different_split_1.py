@@ -10,8 +10,6 @@ train_batch_items, test_batch_items, list_emotions, list_sentiments = part2_2(co
 
 part2_3_1(train_batch_items, test_batch_items, list_emotions, list_sentiments, f)
 
-part2_3_1(train_batch_items, test_batch_items, list_emotions, list_sentiments, f)
-
 part2_3_2(train_batch_items, test_batch_items, list_emotions, list_sentiments, f)
 
 part2_3_3(train_batch_items, test_batch_items, list_emotions, list_sentiments, f)
