@@ -1,6 +1,8 @@
 # 472a1
 
-To run our application, we must first install all the dependencies that are required. To do so, uncomment “# install packages by running pip install -r requirements.txt” in main.py file located in the ‘src’ folder. Then, we can run main.py, to start our application. 
+To run our application, we must first install all the dependencies that are required. To do so, uncomment 
+```# install packages by running pip install -r requirements.txt```
+in ```main.py``` file located in the ‘src’ folder. Then, we can run main.py.  
 
 Our static folder contains all the performances summary for our experiment and the plot distribution for our dataset in part 1.
 
