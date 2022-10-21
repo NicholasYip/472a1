@@ -3,7 +3,7 @@ import numpy as np
 from nltk import word_tokenize
 from sklearn.metrics import confusion_matrix, classification_report
 from sklearn.neural_network import MLPClassifier
-from src.functions import performance_output
+from functions import performance_output
 
 # import nltk
 # nltk.download('punkt')
